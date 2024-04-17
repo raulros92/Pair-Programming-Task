@@ -11,65 +11,99 @@ const rateBands = [
 ];
 
 function calculateLBTT(purchasePrice) {
+
+    // Initialise total LBTT to 0
     let totalLBTT = 0;
 
-    switch (true) {
-        case (purchasePrice > 750000):
-            // Calculate LBTT for purchase prices over £750,000
-            const taxableAmount = purchasePrice - rateBands[rateBands.length - 1].threshold;
-            totalLBTT += taxableAmount * rateBands[rateBands.length - 1].rate;
-            // Calculate and add the tax for the other bands
-            for (let i = 0; i < rateBands.length - 1; i++) {
-                const bandTaxableAmount = Math.max(0, Math.min(purchasePrice, rateBands[i + 1].threshold) - rateBands[i].threshold);
-                const bandTax = bandTaxableAmount * rateBands[i].rate;
-                totalLBTT += bandTax;
-            }
-            break;
+    if (purchasePrice > 145000 && purchasePrice <= 250000) {
+        // Calculate the taxable amount for the forth band.
+        const taxableAmount = purchasePrice - rateBands[rateBands.length - 4].threshold;
+        // Calculate the tax for the forth band.
+        const tax = taxableAmount * rateBands[rateBands.length - 4].rate;
+        // Add the tax to the total LBTT
+        totalLBTT += tax;
+        // Calculate and add the tax for the other bands
+        for (let i = 0; i < rateBands.length - 4; i++) {
+            // Calculate the taxable amount for the current band
+            const bandTaxableAmount = Math.max(0, Math.min(purchasePrice, rateBands[i + 1].threshold) - rateBands[i].threshold);
 
-        case (purchasePrice > 325000):
-            // Calculate LBTT for purchase prices between £325,001 and £750,000
-            const thirdBandTaxableAmount = purchasePrice - rateBands[rateBands.length - 2].threshold;
-            totalLBTT += thirdBandTaxableAmount * rateBands[rateBands.length - 2].rate;
-            // Calculate and add the tax for the other bands
-            for (let i = 0; i < rateBands.length - 2; i++) {
-                const bandTaxableAmount = Math.max(0, Math.min(purchasePrice, rateBands[i + 1].threshold) - rateBands[i].threshold);
-                const bandTax = bandTaxableAmount * rateBands[i].rate;
-                totalLBTT += bandTax;
-            }
-            break;
+            // Calculate the tax for the current band
+            const bandTax = bandTaxableAmount * rateBands[i].rate;
 
-        case (purchasePrice > 250000):
-            // Calculate LBTT for purchase prices between £250,001 and £325,000
-            const secondBandTaxableAmount = purchasePrice - rateBands[rateBands.length - 3].threshold;
-            totalLBTT += secondBandTaxableAmount * rateBands[rateBands.length - 3].rate;
-            // Calculate and add the tax for the other bands
-            for (let i = 0; i < rateBands.length - 3; i++) {
-                const bandTaxableAmount = Math.max(0, Math.min(purchasePrice, rateBands[i + 1].threshold) - rateBands[i].threshold);
-                const bandTax = bandTaxableAmount * rateBands[i].rate;
-                totalLBTT += bandTax;
-            }
-            break;
+            // Add the tax to the total LBTT
+            totalLBTT += bandTax;
+        }
 
-        case (purchasePrice > 145000):
-            // Calculate LBTT for purchase prices between £145,001 and £250,000
-            const firstBandTaxableAmount = purchasePrice - rateBands[rateBands.length - 4].threshold;
-            totalLBTT += firstBandTaxableAmount * rateBands[rateBands.length - 4].rate;
-            // Calculate and add the tax for the other bands
-            for (let i = 0; i < rateBands.length - 4; i++) {
-                const bandTaxableAmount = Math.max(0, Math.min(purchasePrice, rateBands[i + 1].threshold) - rateBands[i].threshold);
-                const bandTax = bandTaxableAmount * rateBands[i].rate;
-                totalLBTT += bandTax;
-            }
-            break;
+    }
 
-        default:
-            // For purchase prices below £145,000
-            totalLBTT = 0;
+    if (purchasePrice > 250000 && purchasePrice <= 325000) {
+        // Calculate the taxable amount for the forth band.
+        const taxableAmount = purchasePrice - rateBands[rateBands.length - 3].threshold;
+        // Calculate the tax for the forth band.
+        const tax = taxableAmount * rateBands[rateBands.length - 3].rate;
+        // Add the tax to the total LBTT
+        totalLBTT += tax;
+        // Calculate and add the tax for the other bands
+        for (let i = 0; i < rateBands.length - 3; i++) {
+            // Calculate the taxable amount for the current band
+            const bandTaxableAmount = Math.max(0, Math.min(purchasePrice, rateBands[i + 1].threshold) - rateBands[i].threshold);
+
+            // Calculate the tax for the current band
+            const bandTax = bandTaxableAmount * rateBands[i].rate;
+
+            // Add the tax to the total LBTT
+            totalLBTT += bandTax;
+        }
+
+    }
+
+    if (purchasePrice > 325000 && purchasePrice <= 750000) {
+        // Calculate the taxable amount for the forth band.
+        const taxableAmount = purchasePrice - rateBands[rateBands.length - 2].threshold;
+        // Calculate the tax for the forth band.
+        const tax = taxableAmount * rateBands[rateBands.length - 2].rate;
+        // Add the tax to the total LBTT
+        totalLBTT += tax;
+        // Calculate and add the tax for the other bands
+        for (let i = 0; i < rateBands.length - 2; i++) {
+            // Calculate the taxable amount for the current band
+            const bandTaxableAmount = Math.max(0, Math.min(purchasePrice, rateBands[i + 1].threshold) - rateBands[i].threshold);
+
+            // Calculate the tax for the current band
+            const bandTax = bandTaxableAmount * rateBands[i].rate;
+
+            // Add the tax to the total LBTT
+            totalLBTT += bandTax;
+        }
+
+    }
+
+    if (purchasePrice > 750000) {
+        // Calculate the taxable amount for the last band.
+        const taxableAmount = purchasePrice - rateBands[rateBands.length - 1].threshold;
+
+        // Calculate the tax for the last band
+        const tax = taxableAmount * rateBands[rateBands.length - 1].rate;
+
+        // Add the tax to the total LBTT
+        totalLBTT += tax;
+
+        // Calculate and add the tax for the other bands
+        for (let i = 0; i < rateBands.length - 1; i++) {
+            // Calculate the taxable amount for the current band
+            const bandTaxableAmount = Math.max(0, Math.min(purchasePrice, rateBands[i + 1].threshold) - rateBands[i].threshold);
+
+            // Calculate the tax for the current band
+            const bandTax = bandTaxableAmount * rateBands[i].rate;
+
+            // Add the tax to the total LBTT
+            totalLBTT += bandTax;
+        }
     }
 
     return totalLBTT;
-}
 
+}
 
 //test using Jest.
 module.exports = calculateLBTT;
