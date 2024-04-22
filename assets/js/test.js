@@ -33,6 +33,26 @@ test("Calculate LBTT for a purchase price below £145,000", () => {
     expect(result).toBe(0);
 });
 
+test("Calculate LBTT for £0 purchase price", () => {
+    const purchasePrice = 0;
+    const result = calculateLBTT(purchasePrice);
+    expect(result).toBe(0);
+});
+
+// Negative Values: Check how your code handles negative purchase prices.
+test("Calculate LBTT for a negative purchase price", () => {
+    const purchasePrice = -100000;
+    const result = calculateLBTT(purchasePrice);
+    expect(result).toBe(0);
+});
+
+//Invalid Inputs: Consider how your code behaves when given non-numeric inputs or other invalid data types.
+test("Calculate LBTT for non-numeric input", () => {
+    const purchasePrice = "not a number";
+    const result = calculateLBTT(purchasePrice);
+    expect(result).toBe(0); // It returns 0 for invalid input
+});
+
 /*
 Rate Bands Template for Easy Calculation:
         { threshold: 0, rate: 0 }, //x to 145,000 = ?. 0% of ? = 0.
