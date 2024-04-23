@@ -13,26 +13,10 @@ const rateBands = [
 function calculateLBTT(purchasePrice) {
     let totalLBTT = 0;
 
-    switch (true) {
-        case (purchasePrice > 750000):
-            // Over £750,000
-            totalLBTT = calculateTax(rateBands[4], purchasePrice);
-            break;
-        case (purchasePrice > 325000):
-            // £325,001 to £750,000
-            totalLBTT = calculateTax(rateBands[3], purchasePrice);
-            break;
-        case (purchasePrice > 250000):
-            // £250,001 to £325,000
-            totalLBTT = calculateTax(rateBands[2], purchasePrice);
-            break;
-        case (purchasePrice > 145000):
-            // £145,001 to £250,000
-            totalLBTT = calculateTax(rateBands[1], purchasePrice);
-            break;
-        default:
-            // Below £145,000
-            totalLBTT = 0;
+    for (let i = 0; i < rateBands.length; i++) {
+        if (purchasePrice > rateBands[i].threshold) {
+            totalLBTT = calculateTax(rateBands[i], purchasePrice);
+        }
     }
 
     return totalLBTT;
@@ -41,10 +25,14 @@ function calculateLBTT(purchasePrice) {
         const taxableAmount = price - band.threshold;
         let tax = taxableAmount * band.rate;
         for (let i = 0; i < rateBands.indexOf(band); i++) {
-            const bandTaxableAmount = Math.max(0, Math.min(price, rateBands[i + 1].threshold) - rateBands[i].threshold);
-            tax += bandTaxableAmount * rateBands[i].rate;
+            tax += singleBandCalculation(price, rateBands[i], rateBands[i + 1]);
         }
         return tax;
+    }
+
+    function singleBandCalculation(purchasePrice, rateBand, nextRateBand) {
+        const bandTaxableAmount = Math.max(0, Math.min(purchasePrice, nextRateBand.threshold) - rateBand.threshold);
+        return bandTaxableAmount * rateBand.rate;
     }
 }
 
